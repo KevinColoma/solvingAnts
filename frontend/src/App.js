@@ -5,7 +5,7 @@ import ControlsPanel from './components/ControlsPanel';
 import './App.css';
 
 const API_BASE_URL = process.env.NODE_ENV === 'production' 
-  ? 'https://your-backend-url.onrender.com' 
+  ? 'https://solvingants.onrender.com' 
   : 'http://localhost:3001';
 
 function App() {
