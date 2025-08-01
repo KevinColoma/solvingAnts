@@ -30,6 +30,10 @@ class Area {
   addColony(x, y) {
     const position = new Position(x, y);
     const colony = new Colony(position);
+    
+    // Give initial food to the nest so ants can grow and leave
+    colony.nest.foodStock = 10; // Initial food stock
+    
     this.colonies.push(colony);
     
     // Add initial ant to the cell
@@ -129,9 +133,22 @@ class Area {
       }
     }
     
-    // Update colonies
+    // Update colonies and handle new ants
     this.colonies.forEach(colony => {
+      const previousAntCount = colony.ants.length;
       colony.update();
+      
+      // If new ants were created, add them to the nest cell
+      if (colony.ants.length > previousAntCount) {
+        const nestCell = this.getCell(colony.nest.position.x, colony.nest.position.y);
+        if (nestCell) {
+          // Add the newly created ants to the cell
+          const newAnts = colony.ants.slice(previousAntCount);
+          newAnts.forEach(ant => {
+            nestCell.addAnt(ant);
+          });
+        }
+      }
     });
   }
 
