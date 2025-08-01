@@ -31,6 +31,11 @@ function App() {
       setSimulationState(state);
     });
 
+    newSocket.on('simulationReset', () => {
+      setSimulationState(null);
+      console.log('Simulation reset by server');
+    });
+
     return () => {
       newSocket.close();
     };
@@ -55,10 +60,16 @@ function App() {
 
   const stopSimulation = async () => {
     try {
-      await fetch(`${API_BASE_URL}/api/simulation/stop`, {
+      const response = await fetch(`${API_BASE_URL}/api/simulation/stop`, {
         method: 'POST',
       });
-      setSimulationState(null);
+      
+      if (response.ok) {
+        setSimulationState(null);
+        console.log('Simulation stopped successfully');
+      } else {
+        console.error('Failed to stop simulation');
+      }
     } catch (error) {
       console.error('Error stopping simulation:', error);
     }
@@ -66,10 +77,16 @@ function App() {
 
   const resetSimulation = async () => {
     try {
-      await fetch(`${API_BASE_URL}/api/simulation/reset`, {
+      const response = await fetch(`${API_BASE_URL}/api/simulation/reset`, {
         method: 'POST',
       });
-      setSimulationState(null);
+      
+      if (response.ok) {
+        setSimulationState(null);
+        console.log('Simulation reset successfully');
+      } else {
+        console.error('Failed to reset simulation');
+      }
     } catch (error) {
       console.error('Error resetting simulation:', error);
     }
@@ -82,6 +99,11 @@ function App() {
         <div className="connection-status">
           Status: {isConnected ? '🟢 Connected' : '🔴 Disconnected'}
         </div>
+        <div>
+          
+          <span className="author-name">Kevin Coloma</span>  
+        </div>
+        
       </header>
       
       <div className="main-content">

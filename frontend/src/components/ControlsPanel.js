@@ -143,7 +143,11 @@ const ControlsPanel = ({ onStart, onStop, onReset, simulationState }) => {
             </button>
           )}
           
-          <button className="btn btn-secondary" onClick={onReset}>
+          <button 
+            className="btn btn-secondary" 
+            onClick={onReset}
+            title="Reset simulation and clear all data"
+          >
             🔄 Reset
           </button>
         </div>

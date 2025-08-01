@@ -63,7 +63,6 @@ app.post('/api/simulation/start', (req, res) => {
 app.post('/api/simulation/stop', (req, res) => {
   if (simulation) {
     simulation.stop();
-    simulation = null;
   }
   res.json({ message: 'Simulation stopped' });
 });
@@ -71,8 +70,8 @@ app.post('/api/simulation/stop', (req, res) => {
 app.post('/api/simulation/reset', (req, res) => {
   if (simulation) {
     simulation.stop();
+    simulation = null;
   }
-  simulation = null;
   res.json({ message: 'Simulation reset' });
 });
 
@@ -96,6 +95,9 @@ io.on('connection', (socket) => {
 setInterval(() => {
   if (simulation && simulation.isRunning()) {
     io.emit('simulationUpdate', simulation.getState());
+  } else if (!simulation) {
+    // Notify clients that simulation is reset/stopped
+    io.emit('simulationReset');
   }
 }, 100);
 
